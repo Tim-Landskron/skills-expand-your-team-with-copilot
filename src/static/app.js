@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("activity-search");
   const searchButton = document.getElementById("search-button");
   const categoryFilters = document.querySelectorAll(".category-filter");
+  const difficultyFilters = document.querySelectorAll(".difficulty-filter");
   const dayFilters = document.querySelectorAll(".day-filter");
   const timeFilters = document.querySelectorAll(".time-filter");
 
@@ -37,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // State for activities and filters
   let allActivities = {};
   let currentFilter = "all";
+  let currentDifficulty = "any";
   let searchQuery = "";
   let currentDay = "";
   let currentTimeRange = "";
@@ -425,6 +427,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      const difficulty = (details.difficulty || "").toLowerCase();
+      if (
+        currentDifficulty !== "any" &&
+        (currentDifficulty === "all" ? difficulty : difficulty !== currentDifficulty)
+      ) {
+        return;
+      }
+
       // Apply weekend filter if selected
       if (currentTimeRange === "weekend" && details.schedule_details) {
         const activityDays = details.schedule_details.days;
@@ -522,7 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activityCard.innerHTML = `
       ${tagHtml}
       <h4>${name}</h4>
-      <p>${details.description}</p>
+      <p class="activity-description">${details.description}</p>
       <p class="tooltip">
         <strong>Schedule:</strong> ${formattedSchedule}
         <span class="tooltip-text">Regular meetings at this time throughout the semester</span>
@@ -571,6 +581,15 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
+    if (details.difficulty) {
+      const difficulty = document.createElement("p");
+      const label = document.createElement("strong");
+      label.textContent = "Difficulty: ";
+      difficulty.appendChild(label);
+      difficulty.appendChild(document.createTextNode(details.difficulty));
+      activityCard.querySelector(".activity-description").after(difficulty);
+    }
+
     // Add click handlers for delete buttons
     const deleteButtons = activityCard.querySelectorAll(".delete-participant");
     deleteButtons.forEach((button) => {
@@ -611,6 +630,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update current filter and display filtered activities
       currentFilter = button.dataset.category;
+      displayFilteredActivities();
+    });
+  });
+
+  difficultyFilters.forEach((button) => {
+    button.addEventListener("click", () => {
+      difficultyFilters.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      currentDifficulty = button.dataset.difficulty;
       displayFilteredActivities();
     });
   });
