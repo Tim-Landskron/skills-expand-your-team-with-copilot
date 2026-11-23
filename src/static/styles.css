@@ -32,6 +32,24 @@
   --info-light: #d1ecf1;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --primary: #3949ab;
+  --primary-light: #5c6bc0;
+  --primary-dark: #1a237e;
+  --background: #121212;
+  --surface: #1e1e1e;
+  --text-primary: #eeeeee;
+  --text-secondary: #b0b0b0;
+  --border: #424242;
+  --border-light: #333333;
+  --border-focus: #616161;
+  --success-light: #1b3a20;
+  --warning-light: #4a3510;
+  --error-light: #4a1c1c;
+  --info-light: #12363b;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -52,7 +70,7 @@ body {
 
 header {
   text-align: center;
-  padding: 12px 0;
+  padding: 48px 0 12px;
   margin-bottom: 15px;
   background-color: var(--primary);
   color: var(--primary-text);
@@ -487,6 +505,8 @@ footer {
   flex: 1;
   min-width: 0; /* Add this to prevent input from overflowing */
   padding: 6px 10px;
+  color: var(--text-primary);
+  background-color: var(--surface);
   border: 1px solid var(--border);
   border-right: none;
   border-radius: 20px 0 0 20px;
@@ -617,6 +637,9 @@ footer {
   position: absolute;
   top: 10px;
   right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 #user-status {
